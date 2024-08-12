@@ -1,0 +1,11 @@
+Post localhost:8080/pagamentos
+{
+  "valor": 120.00,
+  "nome": "George o rei da floresta",
+  "numeroDoCartao": 1234567890128797,
+	"validade": "12/30",
+	"codigoDeSeguranca": "654",
+	"status": "CONFIRMADO",
+	"pedidoId": 2,
+	"formaDePagamento": 3
+}
