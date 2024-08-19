@@ -6,7 +6,9 @@ import com.github.rkkt.ms_pagamento.model.Pagamento;
 import com.github.rkkt.ms_pagamento.model.Status;
 import com.github.rkkt.ms_pagamento.repository.PagamentoRepository;
 
+import com.github.rkkt.ms_pagamento.service.exception.ResourceNotFoundException;
 import jakarta.persistence.EntityNotFoundException;
+import org.hibernate.boot.model.internal.CreateKeySecondPass;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -32,7 +34,7 @@ public class PagamentoService {
     @Transactional(readOnly = true)
     public PagamentoDTO findById(Long id) {
         Pagamento entity = repository.findById(id).orElseThrow(
-                () -> new EntityNotFoundException("Recurso não encontrado")
+                () -> new ResourceNotFoundException("Recurso não encontrado! Id: " + id)
         );
 
         return new PagamentoDTO(entity);
@@ -47,14 +49,25 @@ public class PagamentoService {
     }
 
     @Transactional
+    public PagamentoDTO update(Long id, PagamentoDTO dto) {
+        try {
+            Pagamento entity = repository.getReferenceById(id);
+            copyDtoToEntity(dto, entity);
+            return new PagamentoDTO(entity);
+        } catch (EntityNotFoundException e) {
+            throw new ResourceNotFoundException("Recurso não encontrado! Id: " + id);
+        }
+    }
+
+    @Transactional
     public void delete(Long id) {
         if (!repository.existsById(id)) {
-            throw new EntityNotFoundException("Recurso não encontrado");
+            throw new ResourceNotFoundException("Recurso não encontrado");
         }
         try {
             repository.deleteById(id);
         } catch (EntityNotFoundException e) {
-            throw new EntityNotFoundException("Recurso não encontrado");
+            throw new ResourceNotFoundException("Recurso não encontrado");
         }
     }
 
