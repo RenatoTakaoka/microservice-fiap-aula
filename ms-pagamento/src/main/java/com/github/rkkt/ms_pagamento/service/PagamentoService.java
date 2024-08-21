@@ -6,10 +6,12 @@ import com.github.rkkt.ms_pagamento.model.Pagamento;
 import com.github.rkkt.ms_pagamento.model.Status;
 import com.github.rkkt.ms_pagamento.repository.PagamentoRepository;
 
+import com.github.rkkt.ms_pagamento.service.exception.DatabaseException;
 import com.github.rkkt.ms_pagamento.service.exception.ResourceNotFoundException;
 import jakarta.persistence.EntityNotFoundException;
 import org.hibernate.boot.model.internal.CreateKeySecondPass;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -66,8 +68,8 @@ public class PagamentoService {
         }
         try {
             repository.deleteById(id);
-        } catch (EntityNotFoundException e) {
-            throw new ResourceNotFoundException("Recurso não encontrado");
+        } catch (DataIntegrityViolationException e) {
+            throw new DatabaseException("Recurso não encontrado");
         }
     }
 
