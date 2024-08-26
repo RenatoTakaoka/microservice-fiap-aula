@@ -1,6 +1,5 @@
-package com.github.rkkt.ms_pedidos.models;
+package com.github.rkkt.ms_pedidos.dto;
 
-import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
@@ -12,22 +11,12 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-@Entity
-@Table(name = "tb_item_do_pedido")
-public class ItemDoPedido {
+public class ItemDoPedidoDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(nullable = false)
     @NotNull(message = "Campo requerido")
     @Positive(message = "Quantidade deve ser um numero positivo")
     private Integer quantidade;
-    @Column(nullable = false)
-    @NotNull(message = "Campo requerido")
     private String descricao;
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "pedido_id")
-    private Pedido pedido;
 
 }
