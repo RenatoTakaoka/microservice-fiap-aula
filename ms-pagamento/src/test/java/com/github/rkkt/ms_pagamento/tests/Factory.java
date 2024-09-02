@@ -1,5 +1,6 @@
 package com.github.rkkt.ms_pagamento.tests;
 
+import com.github.rkkt.ms_pagamento.dto.PagamentoDTO;
 import com.github.rkkt.ms_pagamento.model.Pagamento;
 import com.github.rkkt.ms_pagamento.model.Status;
 
@@ -12,6 +13,11 @@ public class Factory {
                 "2365145936541245", "07/28", "585", Status.CRIADO,
                 1L, 2L);
         return pagamento;
+    }
+
+    public static PagamentoDTO createPagamentoDTO() {
+        Pagamento pagamento = createPagamento();
+        return new PagamentoDTO(pagamento);
     }
 
 }

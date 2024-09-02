@@ -31,21 +31,27 @@ public class PagamentoController {
     @Autowired
     private PagamentoService service;
 
-    @Operation(summary = "Lista de pagamentos", description = "Encontra todos os pagamentos",
-            responses = {
-                    @ApiResponse(description = "Success", responseCode = "200"),
-                    @ApiResponse(description = "Bad Request", responseCode = "400"),
-                    @ApiResponse(description = "Not Found", responseCode = "404"),
-                    @ApiResponse(description = "Internal Error", responseCode = "500"),
-            })
-    @GetMapping(produces = "application/json")
-    public ResponseEntity<Page<PagamentoDTO>> findAll(@RequestParam(value = "page", defaultValue = "0") Integer page,
-                                                      @RequestParam(value = "size", defaultValue = "12") Integer size,
-                                                      @RequestParam(value = "direction", defaultValue = "asc") String direction) {
-        var sortDirection = direction.equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
+//    @Operation(summary = "Lista de pagamentos", description = "Encontra todos os pagamentos",
+//            responses = {
+//                    @ApiResponse(description = "Success", responseCode = "200"),
+//                    @ApiResponse(description = "Bad Request", responseCode = "400"),
+//                    @ApiResponse(description = "Not Found", responseCode = "404"),
+//                    @ApiResponse(description = "Internal Error", responseCode = "500"),
+//            })
+//    @GetMapping(produces = "application/json")
+//    public ResponseEntity<Page<PagamentoDTO>> findAll(@RequestParam(value = "page", defaultValue = "0") Integer page,
+//                                                      @RequestParam(value = "size", defaultValue = "12") Integer size,
+//                                                      @RequestParam(value = "direction", defaultValue = "asc") String direction) {
+//        var sortDirection = direction.equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
+//
+//        Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, "nome"));
+//        Page<PagamentoDTO> dto = service.findAll(pageable);
+//        return ResponseEntity.ok(dto);
+//    }
 
-        Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, "nome"));
-        Page<PagamentoDTO> dto = service.findAll(pageable);
+    @GetMapping
+    public ResponseEntity<List<PagamentoDTO>> findAll() {
+        List<PagamentoDTO> dto = service.findAll();
         return ResponseEntity.ok(dto);
     }
 
@@ -93,7 +99,6 @@ public class PagamentoController {
     }
 
     @PutMapping("/{id}")
-    @DeleteMapping(value="/{id}")
     @Operation(summary = "Atualiza um pagamento", description = "Atualiza um pagamento pelo id",
             tags = {"Pagamentos"},
             responses = {
