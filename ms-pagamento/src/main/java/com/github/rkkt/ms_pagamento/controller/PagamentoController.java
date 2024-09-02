@@ -93,7 +93,6 @@ public class PagamentoController {
     }
 
     @PutMapping("/{id}")
-    @DeleteMapping(value="/{id}")
     @Operation(summary = "Atualiza um pagamento", description = "Atualiza um pagamento pelo id",
             tags = {"Pagamentos"},
             responses = {
