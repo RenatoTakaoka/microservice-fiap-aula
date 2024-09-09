@@ -46,7 +46,7 @@ public class PagamentoDTO {
     @NotNull(message = "Forma de pagamento ID é obrigatório")
     @Schema(description = "Forma de pagamento 1 - Dinheiro  | 2 - Cartão | 3 - Pix")
     @Positive(message = "O ID do pagamento deve ser um número positivo")
-    private Long formaDePagamento; // 1 - Dinheiro  | 2 - Cartão | 3 - Pix
+    private Long formaDePagamentoId; // 1 - Dinheiro  | 2 - Cartão | 3 - Pix
 
     public PagamentoDTO(Pagamento entity) {
         id = entity.getId();
@@ -57,6 +57,6 @@ public class PagamentoDTO {
         codigoDeSeguranca = entity.getCodigoDeSeguranca();
         status = entity.getStatus();
         pedidoId = entity.getPedidoId();
-        formaDePagamento = entity.getFormaDePagamentoId();
+        formaDePagamentoId = entity.getFormaDePagamentoId();
     }
 }

@@ -83,7 +83,7 @@ public class PagamentoService {
         entity.setCodigoDeSeguranca(dto.getCodigoDeSeguranca());
         entity.setStatus(Status.CRIADO);
         entity.setPedidoId(dto.getPedidoId());
-        entity.setFormaDePagamentoId(dto.getFormaDePagamento());
+        entity.setFormaDePagamentoId(dto.getFormaDePagamentoId());
     }
 
 }
