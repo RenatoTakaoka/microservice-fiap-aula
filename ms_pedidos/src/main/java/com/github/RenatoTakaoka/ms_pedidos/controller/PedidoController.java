@@ -5,6 +5,7 @@ import com.github.RenatoTakaoka.ms_pedidos.dto.PedidoDTO;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -18,6 +19,12 @@ public class PedidoController {
 
     @Autowired
     private PedidoService pedidoService;
+
+    @GetMapping("/port")
+    public ResponseEntity<String> getPort(@Value("${local.server.port}") String port) {
+        String msg = String.format("Requisição da Instância recebida na porta: %s", port);
+        return ResponseEntity.ok(msg);
+    }
 
     @GetMapping
     public ResponseEntity<List<PedidoDTO>> findAll() {
