@@ -1,5 +1,6 @@
 package com.github.RenatoTakaoka.ms_pedidos.controller;
 
+import com.github.RenatoTakaoka.ms_pedidos.dto.StatusDTO;
 import com.github.RenatoTakaoka.ms_pedidos.services.PedidoService;
 import com.github.RenatoTakaoka.ms_pedidos.dto.PedidoDTO;
 import jakarta.validation.Valid;
@@ -48,6 +49,19 @@ public class PedidoController {
                 .toUri();
 
         return ResponseEntity.created(uri).body(dto);
+    }
+
+    @PutMapping("/{id}/pago")
+    public ResponseEntity<Void> aprovarPagamentoDoPedido(@PathVariable @NotNull Long id) {
+        pedidoService.aprovarPagamentoDoPedido(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/{id}/status")
+    public ResponseEntity<PedidoDTO> updatePedidoStatus(@PathVariable Long id,
+                                                        @RequestBody StatusDTO statusDTO) {
+        PedidoDTO dto = pedidoService.updatePedidoStatus(id, statusDTO);
+        return ResponseEntity.ok(dto);
     }
 
 }

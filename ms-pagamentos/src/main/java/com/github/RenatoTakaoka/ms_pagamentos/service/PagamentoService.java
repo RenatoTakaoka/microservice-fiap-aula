@@ -1,6 +1,7 @@
 package com.github.RenatoTakaoka.ms_pagamentos.service;
 
 
+import com.github.RenatoTakaoka.ms_pagamentos.http.PedidoClient;
 import com.github.RenatoTakaoka.ms_pagamentos.model.Pagamento;
 import com.github.RenatoTakaoka.ms_pagamentos.model.Status;
 import com.github.RenatoTakaoka.ms_pagamentos.repository.PagamentoRepository;
@@ -11,13 +12,18 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 public class PagamentoService {
+
+    @Autowired
+    private PedidoClient pedidoClient;
 
     @Autowired
     private PagamentoRepository repository;
@@ -63,7 +69,7 @@ public class PagamentoService {
         }
     }
 
-    @Transactional
+    @Transactional(propagation = Propagation.SUPPORTS)
     public void delete(Long id) {
         if (!repository.existsById(id)) {
             throw new ResourceNotFoundException("Recurso não encontrado");
@@ -73,6 +79,19 @@ public class PagamentoService {
         } catch (DataIntegrityViolationException e) {
             throw new DatabaseException("Recurso não encontrado");
         }
+    }
+
+    @Transactional
+    public void confirmarPagamentoDePedido(Long id) {
+        Optional<Pagamento> pagamento = repository.findById(id);
+
+        if (pagamento.isEmpty()) {
+            throw new ResourceNotFoundException("Recurso não encontrado com id: " + id);
+        }
+
+        pagamento.get().setStatus(Status.CONFIRMADO);
+        repository.save(pagamento.get());
+        pedidoClient.atualizarPagamentoDoPedido(pagamento.get().getPedidoId());
     }
 
     private void copyDtoToEntity(PagamentoDTO dto, Pagamento entity) {
