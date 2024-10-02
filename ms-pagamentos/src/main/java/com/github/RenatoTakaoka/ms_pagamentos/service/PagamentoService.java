@@ -105,4 +105,16 @@ public class PagamentoService {
         entity.setFormaDePagamentoId(dto.getFormaDePagamentoId());
     }
 
+    @Transactional
+    public void alterarStatusDoPagamento(Long id) {
+        Optional<Pagamento> pagamento = repository.findById(id);
+
+        if(pagamento.isEmpty()) {
+            throw new ResourceNotFoundException("Recurso não encontrado para o id: " + id);
+        }
+
+        pagamento.get().setStatus(Status.CONFIRMADO_SEM_INTEGRACAO);
+        repository.save(pagamento.get());
+    }
+
 }

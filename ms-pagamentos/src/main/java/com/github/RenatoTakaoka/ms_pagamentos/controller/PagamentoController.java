@@ -2,6 +2,7 @@ package com.github.RenatoTakaoka.ms_pagamentos.controller;
 
 import com.github.RenatoTakaoka.ms_pagamentos.dto.PagamentoDTO;
 import com.github.RenatoTakaoka.ms_pagamentos.service.PagamentoService;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -125,8 +126,13 @@ public class PagamentoController {
     }
 
     @PatchMapping("/{id}/confirmar")
+    @CircuitBreaker(name = "atualizarPedido", fallbackMethod = "pagamentoAutorizadoComIntegracaoPendente")
     public void confirmarPagamentoDePedido(@PathVariable @NotNull Long id) {
         service.confirmarPagamentoDePedido(id);
+    }
+
+    public void pagamentoAutorizadoComIntegracaoPendente (Long id, Exception e) {
+        service.alterarStatusDoPagamento(id);
     }
 
 }
